@@ -10,7 +10,7 @@ const Anchor = ({ href, text }: AnchorProps) => {
       target="_blank"
       onClick={() => setUrlClicked(true)}
       style={{
-        color: urlClicked ? "purple" : "blue",
+        color: urlClicked ? "darkmagenta" : "darkslateblue",
       }}
     >
       {text}

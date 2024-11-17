@@ -1,0 +1,28 @@
+.header {
+  border: 2px solid #ffffff;
+  background-color: #f5f3f2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: left;
+  margin-top: 2%;
+  padding: 20px;
+}
+
+.title {
+  color: #635f5d;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 2em;
+}
+
+.title > .b {
+  font-weight: bold;
+}
+
+.desc {
+  color: #8e8b83;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-size: 1.1rem;
+}

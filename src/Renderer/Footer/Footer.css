@@ -1,0 +1,28 @@
+.footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #e5e2e0;
+  border-top: 2px dashed #cdcdc9;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 0.8rem;
+  padding: 4px 20px 4px 8px;
+  color: #8e8b83;
+}
+
+.src {
+  display: flex;
+  flex-direction: column;
+}
+
+.src > a {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+.cr {
+  font-size: 1.1em;
+}
