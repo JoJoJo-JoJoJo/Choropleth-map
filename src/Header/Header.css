@@ -1,0 +1,16 @@
+.header {
+  border: 2px solid #ffffff;
+  background-color: #f5f3f2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+
+}
+
+.desc {
+
+}
