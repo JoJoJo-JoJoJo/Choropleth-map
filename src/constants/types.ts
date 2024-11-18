@@ -29,6 +29,7 @@ type ChoroProps = {
 };
 
 type MarksProps = {
+  attrs: url1Data[];
   data: url2Data;
 };
 

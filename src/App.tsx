@@ -15,7 +15,8 @@ const App = () => {
   const [loading2, countyData, error2] = useAwaitData<url2Data>(url2, initState2);
 
   useEffect(() => {
-    console.log(eduData)
+    console.log(eduData);
+    console.log(countyData);
     if (eduData === undefined || countyData === undefined) {
       console.error(error1);
       console.error(error2);

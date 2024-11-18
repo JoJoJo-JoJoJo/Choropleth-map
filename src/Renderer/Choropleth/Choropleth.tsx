@@ -5,7 +5,7 @@ import Marks from "./Marks/Marks";
 const Choropleth = ({ eduData, countyData }: ChoroProps) => {
   return (
     <svg width={width} height={height}>
-      <Marks data={countyData} />
+      <Marks attrs={eduData} data={countyData} />
     </svg>
   );
 };
