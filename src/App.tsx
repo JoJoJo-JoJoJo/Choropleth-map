@@ -1,38 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import Header from "./Renderer/Header/Header";
 import Footer from "./Renderer/Footer/Footer";
-import { useData } from "./hooks/useData";
-import { url1, url2 } from "./constants/constants";
-import { useTopoData } from "./hooks/useTopoData";
+import { height, initState1, initState2, url1, url2, width } from "./constants/constants";
 import Renderer from "./Renderer/Renderer";
+import { url1Data, url2Data } from "./constants/types";
+import { useAwaitData } from "./hooks/useAwaitData";
 
 const App = () => {
   // Fetch the education data.
-  const initEDU = useData(url1);
-  const [eduData, setEduData] = useState(initEDU);
-
+  const [loading1, eduData, error1] = useAwaitData<url1Data[]>(url1, initState1);
+  
   // Fetch the topography data and convert it to GeoJSON.
-  const initCOUNTY = useTopoData(url2);
-  const [countyData, setCountyData] = useState(initCOUNTY);
-  console.log(countyData);
+  const [loading2, countyData, error2] = useAwaitData<url2Data>(url2, initState2);
 
   useEffect(() => {
-    if (!eduData) {
-      console.error("eduData is invalid.");
-    } else if (!countyData) {
-      console.error("countyData is invalid.");
-    } else {
-      setEduData(useData(url1));
-      setCountyData(useTopoData(url2));
+    console.log(eduData)
+    if (eduData === undefined || countyData === undefined) {
+      console.error(error1);
+      console.error(error2);
     }
-  }, [url1, url2]);
+  }, []);
 
   return (
     <div className="app">
       <Header />
-      <div>
-        {!eduData || !countyData ? (
+      <div className="main" style={{ width: width, height: height }}>
+        {loading1 || loading2 ? (
           <pre className="loading">Loading...</pre>
         ) : (
           <Renderer eduData={eduData} countyData={countyData} />

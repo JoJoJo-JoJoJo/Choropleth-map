@@ -1,3 +1,5 @@
+import { FeatureCollection } from "geojson";
+
 type urlStateProps = {
   readonly url1: boolean;
   readonly url2: boolean;
@@ -19,22 +21,7 @@ type url1Data = {
   readonly bachelorsOrHigher: number;
 };
 
-type geoFeatures = {
-  type: "Feature";
-  id: string;
-  properties: {
-    name: string;
-  };
-  geometry: {
-    coordinates: [number, number][];
-    type: string;
-  };
-};
-
-type url2Data = {
-  type: "FeatureCollection";
-  features: geoFeatures[];
-};
+type url2Data = FeatureCollection;
 
 type ChoroProps = {
   eduData: url1Data[];

@@ -9,15 +9,14 @@ const useTopoData = (url: string) => {
     const fetchData = async () => {
       try {
         json(url).then((d) => {
-          if (d === null || !d) {
+          if (d === undefined) {
             throw new TypeError("Data should be of a known type");
-          } else {
-            const newData: url2Data = d as url2Data;
-            setData(newData);
           }
+          const newData: url2Data = d as url2Data;
+          setData(newData);
         });
       } catch (err) {
-        throw new Error("Network failed to fetch and parse GeoJSON data.");
+        throw new Error("Network failed to fetch and parse TopoJSON data.");
       }
     };
 
