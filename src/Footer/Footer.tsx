@@ -1,4 +1,4 @@
-import { url1, url2 } from "../../constants/constants";
+import { url1, url2 } from "../constants/constants";
 import Anchor from "./Anchor";
 import "./Footer.css";
 

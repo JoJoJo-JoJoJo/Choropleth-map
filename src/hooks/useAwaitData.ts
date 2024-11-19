@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 
 export const useAwaitData = <T>(
   url: string,
-  initState: T,
   loadOnStart: boolean = true
-): [boolean, T, string, () => void] => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<T>(initState);
+): [boolean, T | null, string, () => void] => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -34,6 +33,12 @@ export const useAwaitData = <T>(
       })
       .then((d) => {
         const fullRes: T = JSON.parse(d.toString());
+        if (fullRes === null) {
+          setError("Data is null");
+        } else if (fullRes === undefined) {
+          setError("Data is undefined.");
+        }
+
         setError("");
         setData(fullRes);
       })
