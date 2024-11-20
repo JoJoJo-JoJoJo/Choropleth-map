@@ -1,48 +1,57 @@
-import { geoMercator, geoPath } from "d3";
 import { MarksProps } from "../../../constants/types";
-import { width } from "../../../constants/constants";
+import { pointer } from "d3";
 
-const Marks = ({ attrs, data, setHoveredCell, setIsHovered }: MarksProps) => {
-  const projection = geoMercator()
-    .scale(width / 2 / Math.PI - 40)
-    .center([0, 0]);
-  const path = geoPath().projection(projection);
-
-  return (
-    <g className="marks">
-      {data.features.map((feature) => {
-        if (feature === null) return;
-        const results = attrs.filter((obj) => obj.fips === feature.id);
-        if (!results[0]) {
-          console.error(
-            `${feature.id} doesn't have a corresponding fips value.`
-          );
-        }
-        return (
-          <path
-            className="county"
-            key={feature.id}
-            d={path(feature)}
-            stroke="#635f5d"
-            strokeWidth={0.5}
-            fill="#f5f3f2"
-            fillOpacity={0.7}
-            data-fips={feature.id}
-            data-education={results[0] ? results[0].bachelorsOrHigher : 0}
-            onMouseEnter={() => {
-              setIsHovered(true);
-              setHoveredCell({
-                xPos: 50, // ! HARD CODED VALUES!!
-                yPos: 50,
-                result: results[0],
-              });
-            }}
-            onMouseLeave={() => setIsHovered(false)}
-          />
+const Marks = ({
+  attrs,
+  features,
+  setHoveredCell,
+  setIsHovered,
+  color,
+  createPath,
+}: MarksProps) => (
+  <g className="marks">
+    {features.map((feature) => {
+      const results = attrs.filter((obj) => obj.fips === feature.id);
+      if (!results[0]) {
+        throw new Error(
+          `${feature.id} doesn't have a corresponding fips value.`
         );
-      })}
-    </g>
-  );
-};
+      }
+      const eduVal: number = results[0].bachelorsOrHigher;
+
+      const dProp = createPath(feature);
+      if (dProp === null || dProp === "") {
+        throw new Error(`${feature.id} is not a valid Feature.`);
+      }
+
+      return (
+        <path
+          className="county"
+          key={feature.id}
+          d={dProp}
+          stroke="black"
+          strokeWidth={0.5}
+          fill={color(eduVal)}
+          fillOpacity={0.7}
+          data-fips={feature.id}
+          data-education={eduVal}
+          onMouseEnter={(e) => {
+            const [x, y] = pointer(e);
+
+            setIsHovered(true);
+            setHoveredCell({
+              xPos: x,
+              yPos: y,
+              result: eduVal,
+              county: results[0].area_name,
+              stateCode: results[0].state,
+            });
+          }}
+          onMouseLeave={() => setIsHovered(false)}
+        />
+      );
+    })}
+  </g>
+);
 
 export default Marks;

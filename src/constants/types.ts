@@ -1,4 +1,10 @@
-import { FeatureCollection } from "geojson";
+import {
+  Feature,
+  FeatureCollection,
+  GeoJsonProperties,
+  Geometry,
+} from "geojson";
+import { Topology } from "topojson-specification";
 
 type marginProps = {
   top: number;
@@ -21,14 +27,13 @@ type url1Data = {
   readonly bachelorsOrHigher: number;
 };
 
-type url2Data = FeatureCollection;
+type url2Data = Topology;
 
-interface ChoroProps {
+type url2GeoData = FeatureCollection;
+
+interface RenderProps {
   eduData: url1Data[];
-  countyData: url2Data;
-}
-
-interface RenderProps extends ChoroProps {
+  features: Feature<Geometry, GeoJsonProperties>[];
   setHoveredCell: React.Dispatch<React.SetStateAction<InteractData | null>>;
   setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -36,7 +41,9 @@ interface RenderProps extends ChoroProps {
 interface InteractData {
   readonly xPos: loadingNum;
   readonly yPos: loadingNum;
-  readonly result: url1Data;
+  readonly result: number;
+  readonly county: string;
+  readonly stateCode: string;
 }
 
 type TooltipProps = {
@@ -44,13 +51,17 @@ type TooltipProps = {
   isHovered: boolean;
 };
 
-type ColorLegendProps = {};
+type ColorLegendProps = {
+  colorScale: d3.ScaleQuantile<string, never>;
+};
 
 type MarksProps = {
   attrs: url1Data[];
-  data: url2Data;
+  features: Feature<Geometry, GeoJsonProperties>[];
   setHoveredCell: React.Dispatch<React.SetStateAction<InteractData | null>>;
   setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
+  color: d3.ScaleQuantile<string, never>;
+  createPath: d3.GeoPath<any, d3.GeoPermissibleObjects>;
 };
 
 export type {
@@ -58,7 +69,7 @@ export type {
   AnchorProps,
   url1Data,
   url2Data,
-  ChoroProps,
+  url2GeoData,
   RenderProps,
   InteractData,
   TooltipProps,

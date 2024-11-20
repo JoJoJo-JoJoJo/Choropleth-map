@@ -4,7 +4,7 @@ export const useAwaitData = <T>(
   url: string,
   loadOnStart: boolean = true
 ): [boolean, T | null, string, () => void] => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState("");
 
@@ -20,27 +20,20 @@ export const useAwaitData = <T>(
     awaitData();
   };
 
-  const awaitData = async () => {
+  const awaitData = () => {
     setLoading(true);
 
     fetch(url)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok.");
-        } else {
-          return res.json();
-        }
-      })
-      .then((d) => {
-        const fullRes: T = JSON.parse(d.toString());
-        if (fullRes === null) {
+      .then((res) => res.text())
+      .then((text) => {
+        if (text.length === 0) {
           setError("Data is null");
-        } else if (fullRes === undefined) {
+        } else if (text === undefined) {
           setError("Data is undefined.");
+        } else {
+          setError("");
+          setData(JSON.parse(text));
         }
-
-        setError("");
-        setData(fullRes);
       })
       .catch((err) => {
         setError(err);

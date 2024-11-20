@@ -2,10 +2,12 @@ import { TooltipProps } from "../../constants/types";
 
 const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
   if (!hoveredCell) return;
-  const { xPos, yPos, result } = hoveredCell;
+  const { xPos, yPos, result, county, stateCode } = hoveredCell;
 
   return (
     <div
+      className="tooltip"
+      id="tooltip"
       style={{
         pointerEvents: "none",
         position: "absolute",
@@ -20,7 +22,11 @@ const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
           position: "absolute",
         }}
       >
-
+        <p className="county">{county}</p>
+        <span>
+          <p>{`${stateCode}: `}</p>
+          <p>{`${result}%`}</p>
+        </span>
       </div>
     </div>
   );

@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { InteractData, url1Data, url2Data } from "../constants/types";
+import {
+  InteractData,
+  url1Data,
+  url2Data,
+  url2GeoData,
+} from "../constants/types";
 import Renderer from "./Renderer/Renderer";
 import { useAwaitData } from "../hooks/useAwaitData";
 import { url1, url2 } from "../constants/constants";
 import "./Choropleth.css";
 import Tooltip from "./Tooltip/Tooltip";
+import * as topojson from "topojson-client";
 
 const Choropleth = () => {
   const [hoveredCell, setHoveredCell] = useState<InteractData | null>(null);
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [geoJson, setGeoJson] = useState<url2GeoData | null>(null);
 
   // Fetch the education data.
   const [loading1, eduData, error1] = useAwaitData<url1Data[]>(url1);
@@ -17,25 +24,33 @@ const Choropleth = () => {
   const [loading2, countyData, error2] = useAwaitData<url2Data>(url2);
 
   useEffect(() => {
-    console.log(eduData);
-    console.log(countyData);
-
     if (error1 !== "") {
       throw new Error(error1);
     } else if (error2 !== "") {
       throw new Error(error2);
     }
-  }, []);
+
+    if (countyData !== null && typeof countyData !== "undefined") {
+      const geoJSON = topojson.feature(
+        countyData,
+        countyData.objects.counties
+      ) as url2GeoData;
+      setGeoJson(geoJSON);
+    }
+
+    console.log(eduData);
+    console.log(geoJson);
+  }, [loading1, loading2]);
 
   return (
     <div id="choropleth" className="choropleth">
-      {loading1 || loading2 || eduData === null || countyData === null ? (
-        "Loading..."
+      {loading1 || loading2 || eduData === null || geoJson === null ? (
+        <pre className="loading">Loading...</pre>
       ) : (
         <>
           <Renderer
             eduData={eduData}
-            countyData={countyData}
+            features={geoJson.features}
             setHoveredCell={setHoveredCell}
             setIsHovered={setIsHovered}
           />
