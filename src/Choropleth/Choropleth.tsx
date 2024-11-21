@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import {
-  InteractData,
-  url1Data,
-  url2Data,
-  url2GeoData,
-} from "../constants/types";
+import { InteractData, url1Data, url2Data } from "../constants/types";
 import Renderer from "./Renderer/Renderer";
 import { useAwaitData } from "../hooks/useAwaitData";
 import { url1, url2 } from "../constants/constants";
 import "./Choropleth.css";
 import Tooltip from "./Tooltip/Tooltip";
 import * as topojson from "topojson-client";
+import { FeatureCollection } from "geojson";
 
 const Choropleth = () => {
   const [hoveredCell, setHoveredCell] = useState<InteractData | null>(null);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [geoJson, setGeoJson] = useState<url2GeoData | null>(null);
+  const [geoJson, setGeoJson] = useState<FeatureCollection | null>(null);
 
   // Fetch the education data.
   const [loading1, eduData, error1] = useAwaitData<url1Data[]>(url1);
@@ -34,12 +30,15 @@ const Choropleth = () => {
       const geoJSON = topojson.feature(
         countyData,
         countyData.objects.counties
-      ) as url2GeoData;
+      );
       setGeoJson(geoJSON);
     }
 
-    console.log(eduData);
-    console.log(geoJson);
+    if (countyData && eduData) {
+      console.log(eduData);
+      console.log(countyData);
+      console.log(geoJson);
+    }
   }, [loading1, loading2]);
 
   return (

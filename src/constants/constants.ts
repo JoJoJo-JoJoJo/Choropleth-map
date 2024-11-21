@@ -12,5 +12,7 @@ const url2 =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/counties.json";
 
 const schemeColors = 9;
+const tickSpaces = 20;
+const tickRadius = 10;
 
-export { width, height, margin, url1, url2, schemeColors };
+export { width, height, margin, url1, url2, schemeColors, tickSpaces, tickRadius };

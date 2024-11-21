@@ -1,6 +1,5 @@
 import {
   Feature,
-  FeatureCollection,
   GeoJsonProperties,
   Geometry,
 } from "geojson";
@@ -28,8 +27,6 @@ type url1Data = {
 };
 
 type url2Data = Topology;
-
-type url2GeoData = FeatureCollection;
 
 interface RenderProps {
   eduData: url1Data[];
@@ -69,7 +66,6 @@ export type {
   AnchorProps,
   url1Data,
   url2Data,
-  url2GeoData,
   RenderProps,
   InteractData,
   TooltipProps,
