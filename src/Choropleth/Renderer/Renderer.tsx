@@ -2,8 +2,9 @@ import * as d3 from "d3";
 import { height, margin, schemeColors, width } from "../../constants/constants";
 import { RenderProps } from "../../constants/types";
 import Marks from "./Marks/Marks";
-import { geoAlbers, geoPath } from "d3-geo";
+import { geoAlbersUsa, geoPath } from "d3-geo";
 import ColorLegend from "./ColorLegend/ColorLegend";
+import React from "react";
 
 const Renderer = ({
   eduData,
@@ -21,7 +22,8 @@ const Renderer = ({
     .scaleQuantile(scheme)
     .domain(d3.range(minmax[0], minmax[1], (minmax[1] - minmax[0]) / schemeColors));
   
-  const path = geoPath().projection(geoAlbers());
+  const proj = geoAlbersUsa();
+  const path = geoPath().projection(proj);
 
   return (
     <svg
@@ -48,4 +50,4 @@ const Renderer = ({
   );
 };
 
-export default Renderer;
+export default React.memo(Renderer);

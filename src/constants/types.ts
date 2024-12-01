@@ -1,8 +1,4 @@
-import {
-  Feature,
-  GeoJsonProperties,
-  Geometry,
-} from "geojson";
+import { Feature, GeoJsonProperties, Geometry } from "geojson";
 import { Topology } from "topojson-specification";
 
 type marginProps = {

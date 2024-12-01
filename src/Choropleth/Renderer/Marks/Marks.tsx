@@ -21,7 +21,7 @@ const Marks = ({
 
       const dProp = createPath(feature);
       if (dProp === null || dProp === "") {
-        throw new Error(`${feature.id} is not a valid Feature.`);
+        throw new Error(`${feature.id} is not a valid Feature.\n${feature}`);
       }
 
       return (

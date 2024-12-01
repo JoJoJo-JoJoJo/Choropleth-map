@@ -1,3 +1,4 @@
+import React from "react";
 import { TooltipProps } from "../../constants/types";
 
 const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
@@ -32,4 +33,4 @@ const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
   );
 };
 
-export default Tooltip;
+export default React.memo(Tooltip);
