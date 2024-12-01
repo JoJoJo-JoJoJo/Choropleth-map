@@ -2,7 +2,6 @@ import * as d3 from "d3";
 import { height, margin, schemeColors, width } from "../../constants/constants";
 import { RenderProps } from "../../constants/types";
 import Marks from "./Marks/Marks";
-import { geoAlbersUsa, geoPath } from "d3-geo";
 import ColorLegend from "./ColorLegend/ColorLegend";
 import React from "react";
 
@@ -21,9 +20,6 @@ const Renderer = ({
   const quantile = d3
     .scaleQuantile(scheme)
     .domain(d3.range(minmax[0], minmax[1], (minmax[1] - minmax[0]) / schemeColors));
-  
-  const proj = geoAlbersUsa();
-  const path = geoPath().projection(proj);
 
   return (
     <svg
@@ -38,12 +34,11 @@ const Renderer = ({
       >
         <ColorLegend colorScale={quantile} />
         <Marks
-          attrs={eduData}
+          eduData={eduData}
           features={features}
           setHoveredCell={setHoveredCell}
           setIsHovered={setIsHovered}
           color={quantile}
-          createPath={path}
         />
       </g>
     </svg>

@@ -49,12 +49,11 @@ type ColorLegendProps = {
 };
 
 type MarksProps = {
-  attrs: url1Data[];
+  eduData: url1Data[];
   features: Feature<Geometry, GeoJsonProperties>[];
   setHoveredCell: React.Dispatch<React.SetStateAction<InteractData | null>>;
   setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
   color: d3.ScaleQuantile<string, never>;
-  createPath: d3.GeoPath<any, d3.GeoPermissibleObjects>;
 };
 
 export type {
