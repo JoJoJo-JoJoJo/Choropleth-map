@@ -16,4 +16,14 @@ const tickSpaces = 20;
 const tickRadius = 8;
 const xMove = 70;
 
-export { width, height, margin, url1, url2, schemeColors, tickSpaces, tickRadius, xMove };
+export {
+  width,
+  height,
+  margin,
+  url1,
+  url2,
+  schemeColors,
+  tickSpaces,
+  tickRadius,
+  xMove,
+};

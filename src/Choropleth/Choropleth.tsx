@@ -1,94 +1,63 @@
-import React, { useEffect, useState } from "react";
-import { InteractData, url1Data, url2Data } from "../constants/types";
-import Renderer from "./Renderer/Renderer";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { url1, url2 } from "../constants/constants";
-import "./Choropleth.css";
-import Tooltip from "./Tooltip/Tooltip";
+import { useFetchDataG } from "../hooks/useFetchDataG";
+import { InteractData, url1Data, url2Data } from "../constants/types";
+import Loading from "./Loading";
 import * as topojson from "topojson-client";
 import { FeatureCollection } from "geojson";
-import { useQuery } from "@tanstack/react-query";
-import { FeCol } from "../constants/instances";
+const Renderer = lazy(() => import("./Renderer/Renderer"));
+const Tooltip = lazy(() => import("./Tooltip/Tooltip"));
+import "./Choropleth.css";
 
 const Choropleth = () => {
   const [hoveredCell, setHoveredCell] = useState<InteractData | null>(null);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [eduData, setEduData] = useState<url1Data[] | null>(null);
   const [geoData, setGeoData] = useState<FeatureCollection | null>(null);
 
   const {
-    data: eduJSON,
-    status: eduStatus,
+    data: eduData,
     error: eduError,
-  } = useQuery({
-    queryKey: ["edu", { url1 }],
-    queryFn: async () => {
-      const res = await fetch(url1);
-      return (await res.json()) as url1Data[];
-    },
-  });
+    isFetching: eduIsFetching,
+  } = useFetchDataG<url1Data[]>(url1);
 
   const {
-    data: geoJSON,
-    status: geoStatus,
-    error: geoError,
-  } = useQuery({
-    queryKey: ["county", { url2 }],
-    queryFn: async () => {
-      const res = await fetch(url2);
-      const json = (await res.json()) as url2Data;
-      const geoJSON = topojson.feature(json, json.objects.counties);
-      return geoJSON;
-    },
-  });
+    data: topoData,
+    error: topoError,
+    isFetching: topoIsFetching,
+  } = useFetchDataG<url2Data>(url2);
 
   useEffect(() => {
-    if (eduStatus === "success" && geoStatus === "success") {
-      setEduData(eduJSON as url1Data[]);
-      
-      if (geoJSON instanceof FeCol) {
-        setGeoData(geoJSON as FeatureCollection);
-      }
+    if (!topoError && !topoIsFetching) {
+      const geo = topojson.feature(topoData, topoData.objects.counties);
+      setGeoData(geo as FeatureCollection);
     }
-  }, [eduJSON, eduStatus, geoJSON, geoStatus]);
+  }, [topoData, topoError, topoIsFetching]);
 
-  if (eduStatus === "pending" || geoStatus === "pending") {
-    return <pre className="loading">Loading...</pre>;
+  if (eduError && !eduIsFetching) {
+    throw eduError;
   }
 
-  if (eduError) {
-    return (
-      <span>
-        {eduError.name}: {eduError.message}
-      </span>
-    );
-  } else if (geoError) {
-    return (
-      <span>
-        {geoError.name}: {geoError.message}
-      </span>
-    );
+  if (topoError && !topoIsFetching) {
+    throw topoError;
   }
 
+  if (geoData === null) {
+    return <Loading />;
+  }
 
   return (
-    <div id="choropleth" className="choropleth">
-      {eduData === null || geoData === null ? (
-        <pre className="loading">
-          {!geoData ? "geoData is null" : "eduData is null"}
-        </pre>
-      ) : (
-        <>
-          <Renderer
-            eduData={eduData}
-            features={geoData.features}
-            setHoveredCell={setHoveredCell}
-            setIsHovered={setIsHovered}
-          />
-          <Tooltip hoveredCell={hoveredCell} isHovered={isHovered} />
-        </>
-      )}
-    </div>
+    <Suspense fallback={<Loading />}>
+      <main id="choropleth" className="choropleth">
+        <Renderer
+          eduData={eduData}
+          features={geoData.features}
+          setHoveredCell={setHoveredCell}
+          setIsHovered={setIsHovered}
+        />
+        <Tooltip hoveredCell={hoveredCell} isHovered={isHovered} />
+      </main>
+    </Suspense>
   );
 };
 
-export default React.memo(Choropleth);
+export default Choropleth;
