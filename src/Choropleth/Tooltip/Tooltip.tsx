@@ -1,5 +1,6 @@
 import React from "react";
 import { TooltipProps } from "../../constants/types";
+import "./Tooltip.css";
 
 const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
   if (!hoveredCell) return;
@@ -23,11 +24,8 @@ const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
           position: "absolute",
         }}
       >
-        <p className="county">{county}</p>
-        <span>
-          <p>{`${stateCode}: `}</p>
-          <p>{`${result}%`}</p>
-        </span>
+        <p className="county-name">{county}</p>
+        <p>{`${stateCode}: ${result}%`}</p>
       </div>
     </div>
   );

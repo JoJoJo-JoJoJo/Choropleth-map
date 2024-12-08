@@ -29,6 +29,7 @@ interface RenderProps {
   features: Feature<Geometry, GeoJsonProperties>[];
   setHoveredCell: React.Dispatch<React.SetStateAction<InteractData | null>>;
   setIsHovered: React.Dispatch<React.SetStateAction<boolean>>;
+  color: d3.ScaleQuantile<string, never>;
 }
 
 interface InteractData {
@@ -44,7 +45,7 @@ type TooltipProps = {
   isHovered: boolean;
 };
 
-type ColorLegendProps = {
+type CLegendProps = {
   colorScale: d3.ScaleQuantile<string, never>;
 };
 
@@ -64,6 +65,6 @@ export type {
   RenderProps,
   InteractData,
   TooltipProps,
-  ColorLegendProps,
+  CLegendProps,
   MarksProps,
 };

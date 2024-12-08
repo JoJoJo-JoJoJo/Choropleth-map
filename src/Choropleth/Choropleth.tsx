@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-import { url1, url2 } from "../constants/constants";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { schemeColors, url1, url2 } from "../constants/constants";
 import { useFetchDataG } from "../hooks/useFetchDataG";
 import { InteractData, url1Data, url2Data } from "../constants/types";
 import Loading from "./Loading";
@@ -8,6 +8,8 @@ import { FeatureCollection } from "geojson";
 const Renderer = lazy(() => import("./Renderer/Renderer"));
 const Tooltip = lazy(() => import("./Tooltip/Tooltip"));
 import "./Choropleth.css";
+import ColorLegend from "./ColorLegend/ColorLegend";
+import { extent, range, scaleQuantile, schemePiYG } from "d3";
 
 const Choropleth = () => {
   const [hoveredCell, setHoveredCell] = useState<InteractData | null>(null);
@@ -33,6 +35,20 @@ const Choropleth = () => {
     }
   }, [topoData, topoError, topoIsFetching]);
 
+  const minmax = extent(eduData, (d) => d.bachelorsOrHigher);
+  if (!minmax[0] || !minmax[1]) {
+    throw new TypeError("The extents of eduData are undefined.");
+  }
+
+  const scheme = useMemo(() => schemePiYG[schemeColors], []);
+  const quantile = useMemo(
+    () =>
+      scaleQuantile(scheme).domain(
+        range(minmax[0], minmax[1], (minmax[1] - minmax[0]) / schemeColors)
+      ),
+    [minmax, scheme]
+  );
+
   if (eduError && !eduIsFetching) {
     throw eduError;
   }
@@ -47,15 +63,19 @@ const Choropleth = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <main id="choropleth" className="choropleth">
-        <Renderer
-          eduData={eduData}
-          features={geoData.features}
-          setHoveredCell={setHoveredCell}
-          setIsHovered={setIsHovered}
-        />
-        <Tooltip hoveredCell={hoveredCell} isHovered={isHovered} />
-      </main>
+      {geoData && (
+        <main id="choropleth" className="choropleth">
+          <Renderer
+            eduData={eduData}
+            features={geoData.features}
+            setHoveredCell={setHoveredCell}
+            setIsHovered={setIsHovered}
+            color={quantile}
+          />
+          <Tooltip hoveredCell={hoveredCell} isHovered={isHovered} />
+          <ColorLegend colorScale={quantile} />
+        </main>
+      )}
     </Suspense>
   );
 };
