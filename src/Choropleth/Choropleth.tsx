@@ -9,7 +9,7 @@ const Renderer = lazy(() => import("./Renderer/Renderer"));
 const Tooltip = lazy(() => import("./Tooltip/Tooltip"));
 import "./Choropleth.css";
 import ColorLegend from "./ColorLegend/ColorLegend";
-import { extent, range, scaleQuantile, schemePiYG } from "d3";
+import { extent, range, scaleQuantile, schemeYlGn } from "d3";
 
 const Choropleth = () => {
   const [hoveredCell, setHoveredCell] = useState<InteractData | null>(null);
@@ -40,7 +40,7 @@ const Choropleth = () => {
     throw new TypeError("The extents of eduData are undefined.");
   }
 
-  const scheme = useMemo(() => schemePiYG[schemeColors], []);
+  const scheme = useMemo(() => schemeYlGn[schemeColors], []);
   const quantile = useMemo(
     () =>
       scaleQuantile(scheme).domain(
@@ -50,10 +50,12 @@ const Choropleth = () => {
   );
 
   if (eduError && !eduIsFetching) {
+    alert("Error fetching data.\nReload to try again.");
     throw eduError;
   }
 
   if (topoError && !topoIsFetching) {
+    alert("Error fetching data.\nReload to try again.");
     throw topoError;
   }
 

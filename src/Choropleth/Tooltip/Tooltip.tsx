@@ -1,6 +1,7 @@
 import React from "react";
 import { TooltipProps } from "../../constants/types";
 import "./Tooltip.css";
+import { tooltipHeight, tooltipWidth } from "../../constants/constants";
 
 const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
   if (!hoveredCell) return;
@@ -16,6 +17,8 @@ const Tooltip = ({ hoveredCell, isHovered }: TooltipProps) => {
         left: xPos,
         top: yPos,
         opacity: isHovered ? 0.7 : 0,
+        width: tooltipWidth,
+        height: tooltipHeight,
       }}
       data-education={result}
     >

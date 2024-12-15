@@ -19,6 +19,10 @@ const schemeColors = 9;
 const tickRadius = 8;
 const rowLength = 5;
 
+// Tooltip:
+const tooltipWidth = 160;
+const tooltipHeight = 80;
+
 export {
   width,
   height,
@@ -28,4 +32,6 @@ export {
   schemeColors,
   tickRadius,
   rowLength,
+  tooltipWidth,
+  tooltipHeight,
 };
