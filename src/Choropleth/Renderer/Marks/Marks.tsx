@@ -1,6 +1,7 @@
 import React from "react";
 import { MarksProps } from "../../../constants/types";
-import { geoPath, pointer } from "d3";
+import { geoPath } from "d3";
+import { tooltipHeight } from "../../../constants/constants";
 
 const Marks = ({
   eduData,
@@ -35,12 +36,10 @@ const Marks = ({
               data-fips={feature.id}
               data-education={eduVal}
               onMouseEnter={(e) => {
-                const [x, y] = pointer(e);
-
                 setIsHovered(true);
                 setHoveredCell({
-                  xPos: x,
-                  yPos: y,
+                  xPos: e.pageX,
+                  yPos: e.pageY - (tooltipHeight / 2),
                   result: eduVal,
                   county: results[0].area_name,
                   stateCode: results[0].state,

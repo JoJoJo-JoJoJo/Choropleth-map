@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/d3": "^7.4.3",
-    "@types/react": "^18.3.12",
+    "@types/react": "^18.3.16",
     "@types/react-dom": "^18.3.1",
     "@types/topojson": "^3.2.6",
     "@vitejs/plugin-react": "^4.3.4",
